@@ -30,6 +30,7 @@
     "trailingComma": "none"
   },
   "dependencies": {
+    "@observablehq/inputs": "^0.10.6",
     "csv-parser": "^3.0.0",
     "ramda": "^0.29.1"
   },
