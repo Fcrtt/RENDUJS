@@ -1,16 +1,44 @@
 import * as R from 'ramda'
-import { writeFileSync } from 'fs';
+import {writeFileSync} from 'fs';
+import csv from 'csv-parser';
+import * as fs from "fs";
+const data = 'trucs à écrire dans le fichier';
 
-const predjson = 'fonction créant fichier json contenant les resultats des preds';
+const createfile = (text) => {
+    try {
+        writeFileSync('results.txt', text);
+        console.log('Le fichier a été écrit avec succès.');
+    } catch (error) {
+        console.error('Une erreur s\'est produite lors de l\'écriture du fichier :', error);
+    }
+};
 
-console.log(predjson);
+const filtrerParAgeInferieur = (file, ageLimite) => {
+    const personnesJeunes = [];
 
+    const estJeune = R.compose(R.lt(R.__, ageLimite), parseInt, R.prop('age'));
 
-const data = 'Contenu à écrire dans le fichier';
+    const processRow = R.when(
+        estJeune,
+        R.tap(R.flip(R.append)(personnesJeunes))
+    );
 
-try {
-    writeFileSync('results.txt', data);
-    console.log('Le fichier a été écrit avec succès.');
-} catch (error) {
-    console.error('Une erreur s\'est produite lors de l\'écriture du fichier :', error);
-}
+    const onData = R.forEach(processRow);
+
+    const onEnd = () => {
+        console.log("Personnes dont l'âge est inférieur à", ageLimite, ":", personnesJeunes);
+    };
+
+    const readStream = fs.createReadStream(file);
+
+    readStream
+        .pipe(csv())
+        .on('data', onData)
+        .on('end', onEnd);
+
+    return(personnesJeunes);
+};
+
+createfile(data);
+filtrerParAgeInferieur('athlete_events.csv', 30);
+
