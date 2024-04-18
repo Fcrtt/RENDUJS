@@ -2,6 +2,7 @@ import * as R from 'ramda'
 import {writeFileSync} from 'fs';
 import csv from 'csv-parser';
 import * as fs from "fs";
+import {Table} from "@observablehq/inputs";
 const data = 'trucs à écrire dans le fichier';
 
 const createfile = (text) => {
@@ -40,6 +41,23 @@ const filtrerParAgeInferieur = (file, ageLimite) => {
         .on('end', onEnd);
 };
 
+const transformCSV = R.pipe(
+    R.pipe( //text
+        R.split('\n'), //rows text
+        R.map( //row text
+            R.pipe( //row text
+                R.split(','), //cells
+                R.map(R.trim) //trim cells
+            )
+        )
+    ), //[ rows -> cells]
+    R.splitAt(1), //name's column first row
+    R.apply(   //[ [names], [lines] ]
+        R.lift(R.zipObj)
+    )
+);
 
+const arrayOfObject = transformCSV('athlete_events.csv');
+Table(arrayOfObject);
 createfile(data);
 filtrerParAgeInferieur('athlete_events.csv', 30);
