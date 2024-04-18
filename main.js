@@ -16,11 +16,14 @@ const createfile = (text) => {
 const filtrerParAgeInferieur = (file, ageLimite) => {
     const personnesJeunes = [];
 
-    const estJeune = R.compose(R.lt(R.__, ageLimite), parseInt, R.prop('age'));
+    const estJeune = R.compose(R.lt(R.__, ageLimite), parseInt, R.prop("Age"));
 
     const processRow = R.when(
         estJeune,
-        R.tap(R.flip(R.append)(personnesJeunes))
+        R.tap(row => {
+            console.log("Personne ajoutée :", row); // Débogage : Affiche la personne ajoutée
+            personnesJeunes.push(row);
+        })
     );
 
     const onData = R.forEach(processRow);
@@ -35,10 +38,8 @@ const filtrerParAgeInferieur = (file, ageLimite) => {
         .pipe(csv())
         .on('data', onData)
         .on('end', onEnd);
-
-    return(personnesJeunes);
 };
+
 
 createfile(data);
 filtrerParAgeInferieur('athlete_events.csv', 30);
-
