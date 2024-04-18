@@ -30,6 +30,7 @@
     "trailingComma": "none"
   },
   "dependencies": {
+    "csv-parser": "^3.0.0",
     "ramda": "^0.29.1"
   },
   "private": true
