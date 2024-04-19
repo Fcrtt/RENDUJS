@@ -34,6 +34,12 @@ fs.createReadStream('athlete_events.csv')
         }
     })
     .on('end', () => {
-        // Une fois la lecture terminée, faire quelque chose avec les lignes filtrées
-        console.log(filteredRows);
+        const filteredData = filteredRows.map(row => JSON.stringify(row)).join('\n');
+        fs.writeFile('results.txt', filteredData, (err) => {
+            if (err) {
+                console.error('Erreur lors de l\'écriture du fichier :', err);
+                return;
+            }
+            console.log('Les lignes filtrées ont été écrites dans results.txt');
+        });
     });
