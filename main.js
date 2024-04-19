@@ -21,9 +21,9 @@ createfile(data);
 
 let filteredRows = [];
 const filterRows = row => R.pipe(
-    R.prop('Age'),
-    parseInt,
-    R.gt(R.__, 30)
+    R.prop('Medal'),
+    //parseInt,
+    R.equals(R.__, "Gold")
 )(row);
 fs.createReadStream('athlete_events.csv')
     .pipe(csv())
