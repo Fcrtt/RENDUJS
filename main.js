@@ -2,7 +2,8 @@ import * as R from 'ramda'
 import {writeFileSync} from 'fs';
 import csv from 'csv-parser';
 import * as fs from "fs";
-import {Table} from "@observablehq/inputs";
+import {table} from "@observablehq/inputs";
+
 const data = 'trucs à écrire dans le fichier';
 
 const createfile = (text) => {
@@ -14,50 +15,25 @@ const createfile = (text) => {
     }
 };
 
-const filtrerParAgeInferieur = (file, ageLimite) => {
-    const personnesJeunes = [];
 
-    const estJeune = R.compose(R.lt(R.__, ageLimite), parseInt, R.prop("Age"));
-
-    const processRow = R.when(
-        estJeune,
-        R.tap(row => {
-            console.log("Personne ajoutée :", row); // Débogage : Affiche la personne ajoutée
-            personnesJeunes.push(row);
-        })
-    );
-
-    const onData = R.forEach(processRow);
-
-    const onEnd = () => {
-        console.log("Personnes dont l'âge est inférieur à", ageLimite, ":", personnesJeunes);
-    };
-
-    const readStream = fs.createReadStream(file);
-
-    readStream
-        .pipe(csv())
-        .on('data', onData)
-        .on('end', onEnd);
-};
-
-const transformCSV = R.pipe(
-    R.pipe( //text
-        R.split('\n'), //rows text
-        R.map( //row text
-            R.pipe( //row text
-                R.split(','), //cells
-                R.map(R.trim) //trim cells
-            )
-        )
-    ), //[ rows -> cells]
-    R.splitAt(1), //name's column first row
-    R.apply(   //[ [names], [lines] ]
-        R.lift(R.zipObj)
-    )
-);
-
-const arrayOfObject = transformCSV('athlete_events.csv');
-Table(arrayOfObject);
 createfile(data);
-filtrerParAgeInferieur('athlete_events.csv', 30);
+
+
+let filteredRows = [];
+const filterRows = row => R.pipe(
+    R.prop('Age'),
+    parseInt,
+    R.gt(R.__, 30)
+)(row);
+fs.createReadStream('athlete_events.csv')
+    .pipe(csv())
+    .on('data', (row) => {
+        // Si la ligne passe le filtre, l'ajouter au tableau
+        if (filterRows(row)) {
+            filteredRows.push(row);
+        }
+    })
+    .on('end', () => {
+        // Une fois la lecture terminée, faire quelque chose avec les lignes filtrées
+        console.log(filteredRows);
+    });
