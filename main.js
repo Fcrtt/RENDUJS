@@ -59,8 +59,8 @@ fs.createReadStream('athlete_events.csv')
     });
 
 
-/*
-function countIds(jsonData) {
+
+const countIds = jsonData => {
     const idCounts = {};
     jsonData.forEach(item => {
         const id = item.id;
@@ -83,4 +83,4 @@ fs.readFile('results.json', 'utf8', (err, data) => {
     } catch (error) {
         console.error('Erreur lors de l\'analyse du fichier JSON :', error);
     }
-});*/
+});
