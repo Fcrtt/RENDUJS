@@ -3,11 +3,11 @@ import {writeFileSync} from 'fs';
 import csv from 'csv-parser';
 import * as fs from "fs";
 
-const data = 'trucs à écrire dans le fichier';
+const data = '';
 
 const createfile = (text) => {
     try {
-        writeFileSync('results.txt', text);
+        writeFileSync('results.json', text);
         console.log('Le fichier a été créé avec succès.');
     } catch (error) {
         console.error('Une erreur s\'est produite lors de l\'écriture du fichier :', error);
@@ -47,12 +47,40 @@ fs.createReadStream('athlete_events.csv')
         }
     })
     .on('end', () => {
-        const filteredData = filteredRows.map(row => JSON.stringify(row)).join('\n');
-        fs.writeFile('results.txt', filteredData, (err) => {
+        // Insérer '[' avant la première ligne et ']' après la dernière ligne
+        const filteredData = `[${filteredRows.map(row => JSON.stringify(row)).join(',\n')}]`;
+        fs.writeFile('results.json', filteredData, (err) => {
             if (err) {
                 console.error('Erreur lors de l\'écriture du fichier :', err);
                 return;
             }
-            console.log('Les lignes filtrées ont été écrites dans results.txt.');
+            console.log('Les lignes filtrées ont été écrites dans results.json.');
         });
     });
+
+
+/*
+function countIds(jsonData) {
+    const idCounts = {};
+    jsonData.forEach(item => {
+        const id = item.id;
+        idCounts[id] = (idCounts[id] || 0) + 1;
+    });
+    return idCounts;
+}
+
+// Lire le fichier JSON
+fs.readFile('results.json', 'utf8', (err, data) => {
+    if (err) {
+        console.error('Erreur lors de la lecture du fichier :', err);
+        return;
+    }
+
+    try {
+        const jsonData = JSON.parse(data);
+        const idCounts = countIds(jsonData);
+        console.log('Occurrences des IDs :', idCounts);
+    } catch (error) {
+        console.error('Erreur lors de l\'analyse du fichier JSON :', error);
+    }
+});*/
