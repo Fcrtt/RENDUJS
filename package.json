@@ -32,6 +32,7 @@
   "dependencies": {
     "@observablehq/inputs": "^0.10.6",
     "csv-parser": "^3.0.0",
+    "prettier": "^3.2.5",
     "ramda": "^0.29.1"
   },
   "private": true
