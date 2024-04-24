@@ -19,14 +19,16 @@ fs.createReadStream('athlete_events.csv')
         const filteredData = JSON.stringify(filteredRows);
         fs.writeFileSync('results.json', filteredData);
         console.log('Les lignes filtrées ont été écrites dans results.json.');
-        countIds(filteredRows);
-        lireDonneesLigneParLigne('results.json');
+        countNames(filteredRows);
+        //lireDonneesLigneParLigne('results.json');
     });
 
-const countIds = jsonData => {
+/*const countIds = jsonData => {
     console.log(R.pipe(R.map(R.prop("ID")), R.countBy(R.identity))(jsonData));
+};*/
+const countNames = jsonData => {
+    console.log(R.pipe(R.map(R.prop("Name")), R.countBy(R.identity))(jsonData));
 };
-
 async function lireDonneesLigneParLigne(nomFichier) {
     try {
         const tableauJSON = await lireFichierJSON(nomFichier);
