@@ -22,48 +22,9 @@ fs.createReadStream('athlete_events.csv')
         let resultsf;
         resultsf = R.pipe(R.sortBy(R.prop(1)), R.reverse)(countNames(filteredRows));
         console.log(resultsf);
-        //lireDonneesLigneParLigne('results.json');
     });
 
-/*const countIds = jsonData => {
-    console.log(R.pipe(R.map(R.prop("ID")), R.countBy(R.identity))(jsonData));
-};*/
+
 const countNames = jsonData => {
-    return(R.pipe(R.map(R.prop("Name")), R.countBy(R.identity), R.toPairs)(jsonData));
+    return (R.pipe(R.map(R.prop("Name")), R.countBy(R.identity), R.toPairs)(jsonData));
 };
-
-async function lireDonneesLigneParLigne(nomFichier) {
-    try {
-        const tableauJSON = await lireFichierJSON(nomFichier);
-        for (const ligne of tableauJSON) {
-            console.log(ligne);
-        }
-    } catch (error) {
-        console.error('Une erreur est survenue :', error);
-    }
-}
-
-async function lireFichierJSON(nomFichier) {
-    return new Promise((resolve, reject) => {
-        fs.readFile(nomFichier, 'utf8', (err, data) => {
-            if (err) {
-                reject(err);
-                return;
-            }
-
-            // Vérifier si le fichier est vide
-            if (!data.trim()) {
-                reject(new Error('Le fichier est vide'));
-                return;
-            }
-
-            try {
-                const tableauJSON = JSON.parse(data);
-                resolve(tableauJSON);
-            } catch (error) {
-                reject(error);
-            }
-        });
-    });
-}
-
