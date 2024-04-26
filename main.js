@@ -21,7 +21,8 @@ fs.createReadStream('athlete_events.csv')
         console.log('Les lignes filtrées ont été écrites dans results.json.');
         let resultsf;
         resultsf = R.pipe(R.sortBy(R.prop(1)), R.reverse)(countNames(filteredRows));
-        console.log(resultsf);
+        console.log('Voici les 25 athlètes les plus susceptibles de remporter des médailles aux JO de Paris : ');
+        console.log(R.take(25, resultsf));
     });
 
 
