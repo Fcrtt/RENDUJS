@@ -9,7 +9,10 @@ Un fichier csv archivant l'intégralité des participants aux éditions passées
 ### Forme des données .csv :
 ![csv](modeldonneesjs.png)
 
-## Equipe de développement :
+### Forme des données .json :
+![json](modeldonneesjson.png)
+
+## Equipe de développement : 
 
 Félix Courtin 
 Theo Lucq
