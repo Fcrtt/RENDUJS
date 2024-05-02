@@ -14,8 +14,8 @@ Un fichier csv archivant l'intégralité des participants aux éditions passées
 
 ## Equipe de développement : 
 
-Félix Courtin 
-Theo Lucq
+- Félix Courtin 
+- Theo Lucq
 
 
  
